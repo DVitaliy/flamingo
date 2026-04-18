@@ -1,21 +1,18 @@
-'use client'
+"use client";
 
-import { RelayEnvironmentProvider } from 'react-relay'
-import type { ReactNode } from 'react'
+import { RelayEnvironmentProvider } from "react-relay";
+import type { ReactNode } from "react";
 
-import { relayEnvironment } from '@/lib/relay/environment'
-import { UserProvider } from '@/lib/users/user-context'
+import { relayEnvironment } from "@/lib/relay/environment";
 
 type Props = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 export function Providers({ children }: Props) {
   return (
     <RelayEnvironmentProvider environment={relayEnvironment}>
-      <UserProvider>
-        {children}
-      </UserProvider>
+      {children}
     </RelayEnvironmentProvider>
-  )
+  );
 }

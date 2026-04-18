@@ -2,15 +2,21 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { IssuesPagination } from "@/components/issues/issues-pagination";
-import { StatusFilters } from "@/components/issues/status-filters";
+import { FiltersPanel } from "@/components/issues/filters-panel";
 import { getIssues } from "@/lib/issues/get-issues";
-import { issueStatusLabels, type IssueStatus } from "@/lib/issues/issue-enums";
+import {
+  issueStatusLabels,
+  issuePriorityLabels,
+  type IssueStatus,
+  type IssuePriority,
+} from "@/lib/issues/issue-enums";
 
 import { IssuesListLiveUpdates } from "./issues-list-live-updates";
 
 type Props = {
   searchParams: Promise<{
     status?: string | string[];
+    priority?: string | string[];
     after?: string;
   }>;
 };
@@ -23,21 +29,34 @@ function normalizeStatuses(status?: string | string[]) {
   });
 }
 
+function normalizePriority(priority?: string | string[]) {
+  const values = Array.isArray(priority)
+    ? priority
+    : priority
+      ? [priority]
+      : [];
+
+  return values.filter((value): value is IssuePriority => {
+    return value in issuePriorityLabels;
+  });
+}
+
 export default async function HomePage({ searchParams }: Props) {
   const params = await searchParams;
   const statuses = normalizeStatuses(params.status);
+  const priority = normalizePriority(params.priority);
 
   const after =
     typeof params.after === "string" && params.after.length > 0
       ? params.after
       : null;
 
-  const issues = await getIssues({ statuses, after, first: 15 });
+  const issues = await getIssues({ statuses, priority, after, first: 2 });
 
   return (
     <main className="p-6">
       <IssuesListLiveUpdates />
-      <StatusFilters />
+      <FiltersPanel />
       <h1 className="mb-4 text-2xl font-semibold">Issues</h1>
 
       <div className="space-y-3">
@@ -49,6 +68,7 @@ export default async function HomePage({ searchParams }: Props) {
                   src={issue.users.avatar_url}
                   alt={issue.users.name}
                   fill
+                  sizes="48px"
                   className="object-cover"
                 />
               )}

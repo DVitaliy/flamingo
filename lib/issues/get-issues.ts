@@ -2,7 +2,7 @@ import issuesListQueryNode, {
   type issuesListQuery,
 } from "@/__generated__/issuesListQuery.graphql";
 import { executeGraphQL } from "@/lib/graphql/execute-graphql";
-import type { IssueStatus } from "@/lib/issues/issue-enums";
+import type { IssueStatus, IssuePriority } from "@/lib/issues/issue-enums";
 import {
   issuePriorityLabels,
   issueStatusLabels,
@@ -13,12 +13,14 @@ type IssuesVariables = issuesListQuery["variables"];
 
 type GetIssuesParams = {
   statuses?: IssueStatus[];
+  priority?: IssuePriority[];
   after?: string | null;
   first?: number;
 };
 
 export async function getIssues({
   statuses = [],
+  priority = [],
   after = null,
   first = 20,
 }: GetIssuesParams = {}) {
@@ -26,11 +28,10 @@ export async function getIssues({
     first,
     after,
     filter:
-      statuses.length > 0
+      statuses.length > 0 || priority.length > 0
         ? {
-            status: {
-              in: statuses,
-            },
+            ...(statuses.length > 0 && { status: { in: statuses } }),
+            ...(priority.length > 0 && { priority: { in: priority } }),
           }
         : undefined,
   };

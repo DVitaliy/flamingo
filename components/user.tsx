@@ -5,16 +5,18 @@ import { useLazyLoadQuery } from "react-relay";
 
 import type { usersListQuery as UsersListQueryType } from "@/__generated__/usersListQuery.graphql";
 import { usersListQuery } from "@/app/users-list.query";
-import { useCurrentUser } from "@/lib/users/user-context";
 
-export function User() {
+type Props = {
+  userId: string | null;
+  onChange: (id: string | null) => void;
+};
+
+export function User({ userId, onChange }: Props) {
   const data = useLazyLoadQuery<UsersListQueryType>(
     usersListQuery,
     {},
     { fetchPolicy: "store-and-network" },
   );
-
-  const { userId, setUserId } = useCurrentUser();
 
   const users =
     data.usersCollection?.edges?.flatMap((edge) => {
@@ -32,13 +34,14 @@ export function User() {
             src={selectedUser.avatar_url}
             alt={selectedUser.name}
             fill
+            sizes="32px"
             className="object-cover"
           />
         )}
       </div>
       <select
         value={userId ?? ""}
-        onChange={(e) => setUserId(e.target.value || null)}
+        onChange={(e) => onChange(e.target.value || null)}
         className="cursor-pointer bg-transparent text-sm text-neutral-700 outline-none"
       >
         <option value="">Select user</option>

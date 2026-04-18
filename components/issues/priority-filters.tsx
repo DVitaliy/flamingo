@@ -3,32 +3,30 @@
 import { useMemo, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { issueStatusOptions, type IssueStatus } from "@/lib/issues/issue-enums";
+import { issuePriorityOptions, type IssuePriority } from "@/lib/issues/issue-enums";
 
-export function StatusFilters() {
+export function PriorityFilters() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
-  const selectedStatuses = useMemo(() => {
-    return new Set(searchParams.getAll("status") as IssueStatus[]);
+  const selectedPriorities = useMemo(() => {
+    return new Set(searchParams.getAll("priority") as IssuePriority[]);
   }, [searchParams]);
 
-  const handleCheckedChange = (status: IssueStatus, checked: boolean) => {
+  const handleChange = (priority: IssuePriority, checked: boolean) => {
     const nextParams = new URLSearchParams(searchParams.toString());
-    const currentStatuses = nextParams.getAll("status").filter(Boolean);
+    const current = nextParams.getAll("priority").filter(Boolean);
 
-    nextParams.delete("status");
+    nextParams.delete("priority");
     nextParams.delete("after");
 
-    const nextStatuses = checked
-      ? Array.from(new Set([...currentStatuses, status]))
-      : currentStatuses.filter((value) => value !== status);
+    const next = checked
+      ? Array.from(new Set([...current, priority]))
+      : current.filter((v) => v !== priority);
 
-    nextStatuses.forEach((value) => {
-      nextParams.append("status", value);
-    });
+    next.forEach((v) => nextParams.append("priority", v));
 
     const query = nextParams.toString();
     const nextUrl = query ? `${pathname}?${query}` : pathname;
@@ -36,9 +34,7 @@ export function StatusFilters() {
       ? `${pathname}?${searchParams.toString()}`
       : pathname;
 
-    if (nextUrl === currentUrl) {
-      return;
-    }
+    if (nextUrl === currentUrl) return;
 
     startTransition(() => {
       router.replace(nextUrl);
@@ -48,10 +44,10 @@ export function StatusFilters() {
 
   return (
     <fieldset>
-      <legend className="mb-2 text-sm font-medium">Status</legend>
+      <legend className="mb-2 text-sm font-medium">Priority</legend>
       <div className="flex flex-wrap gap-2">
-        {issueStatusOptions.map((option) => {
-          const checked = selectedStatuses.has(option.value);
+        {issuePriorityOptions.map((option) => {
+          const checked = selectedPriorities.has(option.value);
           return (
             <label
               key={option.value}
@@ -62,9 +58,7 @@ export function StatusFilters() {
                 type="checkbox"
                 className="sr-only"
                 checked={checked}
-                onChange={(e) =>
-                  handleCheckedChange(option.value, e.target.checked)
-                }
+                onChange={(e) => handleChange(option.value, e.target.checked)}
                 disabled={isPending}
               />
               <span
