@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<55ea038f98095a070558ead581aba696>>
+ * @generated SignedSource<<b6e9de0044b49700b521a759a863cb8e>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -151,6 +151,15 @@ v3 = [
     "kind": "Variable",
     "name": "first",
     "variableName": "first"
+  },
+  {
+    "kind": "Literal",
+    "name": "orderBy",
+    "value": [
+      {
+        "created_at": "DescNullsLast"
+      }
+    ]
   }
 ],
 v4 = {
@@ -515,16 +524,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "295fae684dbfdd7d377564d2b1da2d12",
+    "cacheID": "51ac59a2651b9b0cc1b586c7f4e84144",
     "id": null,
     "metadata": {},
     "name": "issuesListQuery",
     "operationKind": "query",
-    "text": "query issuesListQuery(\n  $first: Int!\n  $after: Cursor\n  $filter: issuesFilter\n) {\n  issuesCollection(first: $first, after: $after, filter: $filter) {\n    edges {\n      cursor\n      node {\n        nodeId\n        id\n        title\n        status\n        priority\n        created_at\n        commentsCollection {\n          totalCount\n        }\n        users {\n          name\n          avatar_url\n          nodeId\n        }\n        issue_labelsCollection {\n          edges {\n            node {\n              labels {\n                id\n                name\n                color\n                nodeId\n              }\n              nodeId\n            }\n          }\n        }\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n      startCursor\n      endCursor\n    }\n  }\n}\n"
+    "text": "query issuesListQuery(\n  $first: Int!\n  $after: Cursor\n  $filter: issuesFilter\n) {\n  issuesCollection(first: $first, after: $after, filter: $filter, orderBy: [{created_at: DescNullsLast}]) {\n    edges {\n      cursor\n      node {\n        nodeId\n        id\n        title\n        status\n        priority\n        created_at\n        commentsCollection {\n          totalCount\n        }\n        users {\n          name\n          avatar_url\n          nodeId\n        }\n        issue_labelsCollection {\n          edges {\n            node {\n              labels {\n                id\n                name\n                color\n                nodeId\n              }\n              nodeId\n            }\n          }\n        }\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n      startCursor\n      endCursor\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "ebb1175b151e5bf9c7d8d7c41689a5ce";
+(node as any).hash = "c843896767ef2fc51e7e99ccd921648e";
 
 export default node;

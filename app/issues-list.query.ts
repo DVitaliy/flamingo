@@ -2,7 +2,12 @@ import { graphql } from "react-relay";
 
 export const issuesListQuery = graphql`
   query issuesListQuery($first: Int!, $after: Cursor, $filter: issuesFilter) {
-    issuesCollection(first: $first, after: $after, filter: $filter) {
+    issuesCollection(
+      first: $first
+      after: $after
+      filter: $filter
+      orderBy: [{ created_at: DescNullsLast }]
+    ) {
       edges {
         cursor
         node {

@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-
+import type {
+  issue_priority,
+  issue_status,
+} from "@/__generated__/issueDetailsQuery.graphql";
 import {
-  type IssuePriority,
-  type IssueStatus,
   issuePriorityOptions,
   issueStatusOptions,
 } from "@/lib/issues/issue-enums";
@@ -15,19 +16,22 @@ type Label = { id: string; name: string; color: string };
 type DefaultValues = {
   title?: string;
   description?: string;
-  status?: IssueStatus;
-  priority?: IssuePriority;
+  status?: issue_status;
+  priority?: issue_priority;
   assigneeId?: string | null;
   labelIds?: string[];
 };
 
-type FieldErrors = Partial<Record<
-  "title" | "description" | "status" | "priority" | "assigneeId" | "labelIds",
-  string
->>;
+type FieldErrors = Partial<
+  Record<
+    "title" | "description" | "status" | "priority" | "assigneeId" | "labelIds",
+    string
+  >
+>;
 
 type Props = {
   defaultValues?: DefaultValues;
+  hiddenFields?: Record<string, string>;
   users?: User[];
   labels?: Label[];
   error?: string | null;
@@ -39,6 +43,7 @@ type Props = {
 
 export function IssueForm({
   defaultValues = {},
+  hiddenFields = {},
   users = [],
   labels = [],
   error,
@@ -65,6 +70,9 @@ export function IssueForm({
 
   return (
     <form action={action} className="space-y-5">
+      {Object.entries(hiddenFields).map(([name, value]) => (
+        <input key={name} type="hidden" name={name} value={value} />
+      ))}
       <div className="space-y-1.5">
         <label htmlFor="title" className="block text-sm font-medium">
           Title
