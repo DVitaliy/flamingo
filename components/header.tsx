@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CreateIssueButton } from "@/components/issues/create-issue-button";
 
 export function Header() {
   return (
@@ -6,6 +7,8 @@ export function Header() {
       <Link href="/" className="text-lg font-semibold tracking-tight">
         Flamingo
       </Link>
+
+      <CreateIssueButton />
     </header>
   );
 }

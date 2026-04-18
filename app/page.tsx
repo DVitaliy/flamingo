@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { IssuesPagination } from "@/components/issues/issues-pagination";
 import { FiltersPanel } from "@/components/issues/filters-panel";
+import { IssuesPagination } from "@/components/issues/issues-pagination";
 import { getIssues } from "@/lib/issues/get-issues";
 import {
   issueStatusLabels,
@@ -57,7 +57,7 @@ export default async function HomePage({ searchParams }: Props) {
     <main className="p-6">
       <IssuesListLiveUpdates />
       <FiltersPanel />
-      <h1 className="mb-4 text-2xl font-semibold">Issues</h1>
+      <h1 className="my-4 text-2xl font-semibold">Issues</h1>
 
       <div className="space-y-3">
         {issues.items.map((issue) => (

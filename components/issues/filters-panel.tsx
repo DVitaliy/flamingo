@@ -11,7 +11,7 @@ export function FiltersPanel() {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="mb-4">
+    <div>
       <div className="flex items-center gap-2">
         <button
           onClick={() => setOpen((prev) => !prev)}
