@@ -1,0 +1,11 @@
+{
+    "src": ".",
+    "schema": "./schema.graphql",
+    "language": "typescript",
+    "artifactDirectory": "./__generated__",
+    "eagerEsModules": true,
+    "schemaConfig": {
+        "nodeInterfaceIdField": "nodeId",
+        "nodeInterfaceIdVariableName": "nodeId"
+    }
+}
