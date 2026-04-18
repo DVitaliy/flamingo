@@ -1,7 +1,12 @@
+import { NewIssueForm } from "./new-issue-form";
+
 export default function NewIssuePage() {
   return (
     <main className="p-6">
-      <h1 className="mb-4 text-2xl font-semibold">New Issue</h1>
+      <h1 className="mb-6 text-2xl font-semibold">New Issue</h1>
+      <div className="max-w-xl">
+        <NewIssueForm />
+      </div>
     </main>
   );
 }
