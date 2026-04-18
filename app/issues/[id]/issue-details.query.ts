@@ -11,6 +11,26 @@ export const issueDetailsQuery = graphql`
           description
           status
           priority
+          assignee_id
+          created_at
+          commentsCollection {
+            totalCount
+          }
+          users {
+            name
+            avatar_url
+          }
+          issue_labelsCollection {
+            edges {
+              node {
+                labels {
+                  id
+                  name
+                  color
+                }
+              }
+            }
+          }
         }
       }
     }

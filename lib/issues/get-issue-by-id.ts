@@ -1,36 +1,37 @@
-import type { issueDetailsQuery } from "@/__generated__/issueDetailsQuery.graphql";
+import issueDetailsQueryNode, {
+  type issueDetailsQuery,
+} from "@/__generated__/issueDetailsQuery.graphql";
 import { executeGraphQL } from "@/lib/graphql/execute-graphql";
-
-type IssueNode = NonNullable<
-  NonNullable<
-    NonNullable<issueDetailsQuery["response"]["issuesCollection"]>["edges"]
-  >[number]
->["node"];
+import {
+  issuePriorityLabels,
+  issueStatusLabels,
+} from "@/lib/issues/issue-enums";
 
 type IssueDetailsResponse = issueDetailsQuery["response"];
+type IssueDetailsVariables = issueDetailsQuery["variables"];
 
-const query = `
-  query issueDetailsQuery($id: UUID!) {
-    issuesCollection(filter: { id: { eq: $id } }, first: 1) {
-      edges {
-        node {
-          id
-          nodeId
-          title
-          description
-          status
-          priority
-        }
-      }
-    }
-  }
-`;
-
-export async function getIssueById(id: string): Promise<IssueNode | null> {
-  const data = await executeGraphQL<IssueDetailsResponse, { id: string }>({
-    query,
+export async function getIssueById(id: string) {
+  const data = await executeGraphQL<
+    IssueDetailsResponse,
+    IssueDetailsVariables
+  >({
+    query: issueDetailsQueryNode,
     variables: { id },
   });
 
-  return data.issuesCollection?.edges?.[0]?.node ?? null;
+  const node = data.issuesCollection?.edges?.[0]?.node;
+
+  if (!node) {
+    return null;
+  }
+
+  const normalized = {
+    priority_normalized: issuePriorityLabels[node.priority],
+    status_normalized: issueStatusLabels[node.status],
+  };
+
+  return {
+    ...node,
+    ...normalized,
+  };
 }

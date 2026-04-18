@@ -1,3 +1,5 @@
+import type { ConcreteRequest } from "relay-runtime";
+
 type GraphQLError = {
   message?: string;
 };
@@ -19,11 +21,21 @@ if (typeof supabaseAnonKey !== "string" || supabaseAnonKey.length === 0) {
 }
 
 type ExecuteGraphQLParams<TVariables> = {
-  query: string;
+  query: string | ConcreteRequest;
   variables?: TVariables;
   cache?: RequestCache;
 };
 
+function resolveQueryText(query: string | ConcreteRequest) {
+  if (typeof query === "string") {
+    return query;
+  }
+
+  if (typeof query.params?.text === "string" && query.params.text.length > 0) {
+    return query.params.text;
+  }
+  throw new Error("Relay request does not contain printable query text");
+}
 export async function executeGraphQL<
   TData,
   TVariables = Record<string, never>,
@@ -36,7 +48,7 @@ export async function executeGraphQL<
       Authorization: `Bearer ${supabaseAnonKey}`,
     },
     body: JSON.stringify({
-      query,
+      query: resolveQueryText(query),
       variables: variables ?? {},
     }),
     cache,

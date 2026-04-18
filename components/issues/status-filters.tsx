@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { issueStatusOptions, type IssueStatus } from "@/lib/issues/issue-enums";
@@ -9,6 +9,7 @@ export function StatusFilters() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isPending, startTransition] = useTransition();
 
   const selectedStatuses = useMemo(() => {
     return new Set(searchParams.getAll("status") as IssueStatus[]);
@@ -19,6 +20,7 @@ export function StatusFilters() {
     const currentStatuses = nextParams.getAll("status").filter(Boolean);
 
     nextParams.delete("status");
+    nextParams.delete("after");
 
     const nextStatuses = checked
       ? Array.from(new Set([...currentStatuses, status]))
@@ -29,7 +31,19 @@ export function StatusFilters() {
     });
 
     const query = nextParams.toString();
-    router.replace(query ? `${pathname}?${query}` : pathname);
+    const nextUrl = query ? `${pathname}?${query}` : pathname;
+    const currentUrl = searchParams.toString()
+      ? `${pathname}?${searchParams.toString()}`
+      : pathname;
+
+    if (nextUrl === currentUrl) {
+      return;
+    }
+
+    startTransition(() => {
+      router.replace(nextUrl);
+      router.refresh();
+    });
   };
 
   return (
@@ -44,6 +58,7 @@ export function StatusFilters() {
             onChange={(event) =>
               handleCheckedChange(option.value, event.target.checked)
             }
+            disabled={isPending}
           />
           <span>{option.label}</span>
         </label>
