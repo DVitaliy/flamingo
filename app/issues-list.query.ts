@@ -1,10 +1,18 @@
 import { graphql } from "react-relay";
 
 export const issuesListQuery = graphql`
-  query issuesListQuery($first: Int!, $after: Cursor, $filter: issuesFilter) {
+  query issuesListQuery(
+    $first: Int
+    $after: Cursor
+    $last: Int
+    $before: Cursor
+    $filter: issuesFilter
+  ) {
     issuesCollection(
       first: $first
       after: $after
+      last: $last
+      before: $before
       filter: $filter
       orderBy: [{ created_at: DescNullsLast }]
     ) {

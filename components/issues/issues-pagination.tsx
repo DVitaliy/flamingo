@@ -2,25 +2,26 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
+import type { issuesListQuery$data } from "@/__generated__/issuesListQuery.graphql.ts";
 
 type Props = {
-  hasNextPage: boolean;
-  endCursor: string | null;
+  pageInfo: NonNullable<issuesListQuery$data["issuesCollection"]>["pageInfo"];
 };
 
-export function IssuesPagination({ hasNextPage, endCursor }: Props) {
+export function IssuesPagination({ pageInfo }: Props) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
   const goToNextPage = () => {
-    if (!hasNextPage || !endCursor) {
+    if (!pageInfo.hasNextPage || !pageInfo.endCursor) {
       return;
     }
 
     const nextParams = new URLSearchParams(searchParams.toString());
-    nextParams.set("after", endCursor);
+    nextParams.delete("before");
+    nextParams.set("after", pageInfo.endCursor);
 
     const nextUrl = `${pathname}?${nextParams.toString()}`;
 
@@ -30,9 +31,13 @@ export function IssuesPagination({ hasNextPage, endCursor }: Props) {
     });
   };
 
-  const goToFirstPage = () => {
+  const goToPrevPage = () => {
+    if (!pageInfo.hasPreviousPage || !pageInfo.startCursor) {
+      return;
+    }
     const nextParams = new URLSearchParams(searchParams.toString());
     nextParams.delete("after");
+    nextParams.set("before", pageInfo.startCursor);
 
     const query = nextParams.toString();
     const nextUrl = query ? `${pathname}?${query}` : pathname;
@@ -43,21 +48,26 @@ export function IssuesPagination({ hasNextPage, endCursor }: Props) {
     });
   };
 
+  const disabledPrev =
+    !pageInfo.hasPreviousPage || !pageInfo.startCursor || isPending;
+  const disabledNext =
+    !pageInfo.hasNextPage || !pageInfo.endCursor || isPending;
+
   return (
     <div className="mt-4 flex items-center gap-2">
       <button
         type="button"
-        onClick={goToFirstPage}
-        disabled={isPending}
+        onClick={goToPrevPage}
+        disabled={disabledPrev}
         className="rounded bg-neutral-100 px-3 py-1.5 text-sm font-medium transition-colors hover:bg-neutral-200 disabled:opacity-50"
       >
-        First page
+        Prev
       </button>
 
       <button
         type="button"
         onClick={goToNextPage}
-        disabled={!hasNextPage || !endCursor || isPending}
+        disabled={disabledNext}
         className="rounded bg-neutral-100 px-3 py-1.5 text-sm font-medium transition-colors hover:bg-neutral-200 disabled:opacity-50"
       >
         Next

@@ -3,7 +3,7 @@ import type {
   issue_status,
 } from "@/__generated__/issueDetailsQuery.graphql";
 
-export const issueStatusValues = ["todo", "in_progress", "done"] as const;
+export const issueStatusValues = ["todo", "done"] as const;
 export const issuePriorityValues = ["low", "medium", "high"] as const;
 
 export type IssueStatus = (typeof issueStatusValues)[number];
@@ -11,7 +11,6 @@ export type IssuePriority = (typeof issuePriorityValues)[number];
 
 export const issueStatusLabels: Record<issue_status, string> = {
   todo: "To do",
-  in_progress: "In progress",
   done: "Done",
   "%future added value": "Unknown",
 };

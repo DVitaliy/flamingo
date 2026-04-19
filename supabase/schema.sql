@@ -3,7 +3,6 @@ create extension if not exists pg_graphql;
 
 create type public.issue_status as enum (
   'todo',
-  'in_progress',
   'done'
 );
 

@@ -14,19 +14,23 @@ type IssuesVariables = issuesListQuery["variables"];
 type GetIssuesParams = {
   statuses?: IssueStatus[];
   priority?: IssuePriority[];
-  after?: string | null;
-  first?: number;
+  after?: string;
+  before?: string;
+  size?: number;
 };
 
 export async function getIssues({
   statuses = [],
   priority = [],
-  after = null,
-  first = 20,
+  after,
+  before,
+  size = 20,
 }: GetIssuesParams = {}) {
   const variables: IssuesVariables = {
-    first,
+    first: before ? null : size,
+    last: before ? size : null,
     after,
+    before,
     filter:
       statuses.length > 0 || priority.length > 0
         ? {
@@ -41,7 +45,7 @@ export async function getIssues({
     variables,
   });
 
-  const connection = data.issuesCollection;
+  const connection = data?.issuesCollection;
   return {
     items:
       connection?.edges?.flatMap((edge) => {

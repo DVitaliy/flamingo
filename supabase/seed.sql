@@ -39,7 +39,7 @@ from (
     (
       'Support label filtering in issue list',
       'The take-home requires multi-select filtering by labels, but the reflected pg_graphql schema does not currently expose a relation-based filter on issuesCollection for the many-to-many link through issue_labels. A follow-up should evaluate whether this should be solved through a read-optimized field, a SQL view, or a dedicated function.',
-      'in_progress',
+      'todo',
       'high',
       'Daniel Kim (Developer)'
     ),

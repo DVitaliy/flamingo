@@ -1,6 +1,14 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
+Clone the repository and install dependencies:
+
+```bash
+git clone https://github.com/DVitaliy/flamingo.git
+cd flamingo
+pnpm install
+```
+
 Before the first local run, create `.env.local` from `.env.example` and fill in:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
@@ -236,6 +244,27 @@ This gave me:
 - generated and schema-validated types
 - a working SSR flow in Next.js App Router
 - a path to use Relay where it provides the most value, especially for paginated UI sections
+
+### Detail page trade-off
+
+One important mismatch with the original assignment is that the issue detail page is not yet fully split into section-level Relay fragments.
+
+At the moment:
+
+- the comments section uses Relay fragments and pagination
+- the rest of the detail page still relies on a larger page-level query
+
+If I had more time, I would break the detail page into smaller co-located Relay fragments for:
+
+- header
+- metadata
+- labels
+- description
+- comments
+
+This was mostly a time trade-off. I had not worked with Relay before this take-home, so I prioritized getting Relay integrated correctly with `pg_graphql`, making pagination work, and implementing fragments first in the comments section where Relay provides the clearest benefit.
+
+I can do the same fragment-based split for the full detail page, but that refactor would need more time to do cleanly.
 
 ### What problems came up
 
