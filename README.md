@@ -60,7 +60,7 @@ Where to get them:
 * NEXT_PUBLIC_SUPABASE_URL
     > In Supabase Studio, open your project and copy the Project URL from the Connect dialog, or from __Settings → API__.  
 * NEXT_PUBLIC_SUPABASE_ANON_KEY
-    > For client-side usage, copy the project’s anon key from __Settings → API → Project API keys__. Supabase also notes that the newer publishable key is the preferred replacement for the older anon key, but both are available during the transition period.  
+    > For client-side usage, copy the project’s anon key from __Settings → API → Project API keys__. 
 * NEXT_PUBLIC_SUPABASE_GRAPHQL_URL
     > Build it from your project reference using this format:
     > __https://<PROJECT_REF>.supabase.co/graphql/v1__
@@ -72,7 +72,6 @@ Then make sure the database is initialized and the local GraphQL/Relay artifacts
 
 ```bash
 pnpm schema:sync
-pnpm dev
 ```
 
 `pnpm schema:sync` is required before the first local run, and again whenever the database schema changes.
@@ -89,9 +88,6 @@ pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-
-
 
 ## Spec Compliance Checklist
 
