@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { z } from "zod";
 
 import { PriorityBadge } from "@/components/issues/priority-badge";
+import { getContrastTextColor } from "@/lib/color-contrast";
 import { IssueStatusToggle } from "@/components/issues/issue-status-toggle";
 import { formatDate } from "@/lib/format-date";
 import { getIssueById } from "@/lib/issues/get-issue-by-id";
@@ -84,8 +85,8 @@ export default async function IssueDetailsPage({ params }: Props) {
                 {labels.map((label) => (
                   <span
                     key={label.id}
-                    className="rounded-full px-2.5 py-0.5 text-xs font-medium text-white"
-                    style={{ backgroundColor: label.color }}
+                    className="rounded-full px-2.5 py-0.5 text-xs font-medium"
+                    style={{ backgroundColor: label.color, color: getContrastTextColor(label.color) }}
                   >
                     {label.name}
                   </span>

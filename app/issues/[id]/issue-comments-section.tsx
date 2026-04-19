@@ -58,7 +58,7 @@ export function IssueCommentsSectionV2({
               <span className="text-sm font-medium">
                 {node.users?.name ?? "Unknown"}
               </span>
-              <span className="text-xs text-neutral-400">
+              <span className="text-xs text-neutral-500">
                 {formatDate(node.created_at)}
               </span>
             </div>

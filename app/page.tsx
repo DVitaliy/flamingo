@@ -14,6 +14,7 @@ import {
 
 import { PriorityBadge } from "@/components/issues/priority-badge";
 import { IssueStatusToggle } from "@/components/issues/issue-status-toggle";
+import { getContrastTextColor } from "@/lib/color-contrast";
 import { IssuesListLiveUpdates } from "./issues-list-live-updates";
 
 type Props = {
@@ -100,8 +101,8 @@ export default async function HomePage({ searchParams }: Props) {
                   {issue.issue_labelsCollection?.edges?.map(({ node }) => (
                     <span
                       key={node.labels.id}
-                      style={{ backgroundColor: node.labels.color }}
-                      className="rounded-full px-2 py-0.5 text-xs font-medium text-white"
+                      style={{ backgroundColor: node.labels.color, color: getContrastTextColor(node.labels.color) }}
+                      className="rounded-full px-2 py-0.5 text-xs font-medium"
                     >
                       {node.labels.name}
                     </span>
@@ -112,7 +113,7 @@ export default async function HomePage({ searchParams }: Props) {
                     priority={issue.priority}
                     label={issue.priority_normalized}
                   />
-                  <span>· opened {formatDate(issue.created_at)}</span>
+                  <span className="text-neutral-600">· opened {formatDate(issue.created_at)}</span>
                 </p>
               </div>
 
