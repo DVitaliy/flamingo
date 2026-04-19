@@ -71,7 +71,7 @@ export function IssueCommentsSectionV2({
           className="rounded bg-neutral-100 px-3 py-1.5 text-sm font-medium transition-colors hover:bg-neutral-200 disabled:opacity-50"
           disabled={isLoadingNext}
           onClick={() => {
-            loadNext(3);
+            loadNext(COUNT_MESSAGES);
           }}
         >
           load more
