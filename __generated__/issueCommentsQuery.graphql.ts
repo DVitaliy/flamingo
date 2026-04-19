@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<52fd2e3fe1ece30ac75a9a8a52fb3d82>>
+ * @generated SignedSource<<e52dc1a50a0a040052c31ea2c0aa270f>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -23,6 +23,10 @@ export type issueCommentsQuery$data = {
         readonly body: string;
         readonly created_at: any;
         readonly id: any;
+        readonly users: {
+          readonly avatar_url: string | null | undefined;
+          readonly name: string;
+        } | null | undefined;
       };
     }>;
     readonly pageInfo: {
@@ -82,6 +86,15 @@ v3 = [
     "kind": "Variable",
     "name": "first",
     "variableName": "first"
+  },
+  {
+    "kind": "Literal",
+    "name": "orderBy",
+    "value": [
+      {
+        "created_at": "DescNullsLast"
+      }
+    ]
   }
 ],
 v4 = {
@@ -129,6 +142,20 @@ v9 = {
 v10 = {
   "alias": null,
   "args": null,
+  "kind": "ScalarField",
+  "name": "name",
+  "storageKey": null
+},
+v11 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "avatar_url",
+  "storageKey": null
+},
+v12 = {
+  "alias": null,
+  "args": null,
   "concreteType": "PageInfo",
   "kind": "LinkedField",
   "name": "pageInfo",
@@ -163,6 +190,13 @@ v10 = {
       "storageKey": null
     }
   ],
+  "storageKey": null
+},
+v13 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "nodeId",
   "storageKey": null
 };
 return {
@@ -205,14 +239,27 @@ return {
                   (v6/*: any*/),
                   (v7/*: any*/),
                   (v8/*: any*/),
-                  (v9/*: any*/)
+                  (v9/*: any*/),
+                  {
+                    "alias": null,
+                    "args": null,
+                    "concreteType": "users",
+                    "kind": "LinkedField",
+                    "name": "users",
+                    "plural": false,
+                    "selections": [
+                      (v10/*: any*/),
+                      (v11/*: any*/)
+                    ],
+                    "storageKey": null
+                  }
                 ],
                 "storageKey": null
               }
             ],
             "storageKey": null
           },
-          (v10/*: any*/)
+          (v12/*: any*/)
         ],
         "storageKey": null
       }
@@ -263,33 +310,41 @@ return {
                   {
                     "alias": null,
                     "args": null,
-                    "kind": "ScalarField",
-                    "name": "nodeId",
+                    "concreteType": "users",
+                    "kind": "LinkedField",
+                    "name": "users",
+                    "plural": false,
+                    "selections": [
+                      (v10/*: any*/),
+                      (v11/*: any*/),
+                      (v13/*: any*/)
+                    ],
                     "storageKey": null
-                  }
+                  },
+                  (v13/*: any*/)
                 ],
                 "storageKey": null
               }
             ],
             "storageKey": null
           },
-          (v10/*: any*/)
+          (v12/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "fede3ce5505e1546661591098d573a3c",
+    "cacheID": "1ae75bcfcf4f664988305e2471f942a6",
     "id": null,
     "metadata": {},
     "name": "issueCommentsQuery",
     "operationKind": "query",
-    "text": "query issueCommentsQuery(\n  $issueId: UUID!\n  $first: Int!\n  $after: Cursor\n) {\n  commentsCollection(first: $first, after: $after, filter: {issue_id: {eq: $issueId}}) {\n    totalCount\n    edges {\n      cursor\n      node {\n        id\n        body\n        created_at\n        author_id\n        nodeId\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n      startCursor\n      endCursor\n    }\n  }\n}\n"
+    "text": "query issueCommentsQuery(\n  $issueId: UUID!\n  $first: Int!\n  $after: Cursor\n) {\n  commentsCollection(first: $first, after: $after, filter: {issue_id: {eq: $issueId}}, orderBy: [{created_at: DescNullsLast}]) {\n    totalCount\n    edges {\n      cursor\n      node {\n        id\n        body\n        created_at\n        author_id\n        users {\n          name\n          avatar_url\n          nodeId\n        }\n        nodeId\n      }\n    }\n    pageInfo {\n      hasNextPage\n      hasPreviousPage\n      startCursor\n      endCursor\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "6a27abe140845de64caab4f8330efea6";
+(node as any).hash = "48d34aac3eda0ac6be04eb55620526e4";
 
 export default node;

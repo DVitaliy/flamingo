@@ -1,1 +1,0 @@
-export const FALLBACK_AUTHOR_ID = "004924ab-f59c-4c82-b6eb-d32683382527";

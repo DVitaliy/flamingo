@@ -6,6 +6,7 @@ export const issueCommentsQuery = graphql`
       first: $first
       after: $after
       filter: { issue_id: { eq: $issueId } }
+      orderBy: [{ created_at: DescNullsLast }]
     ) {
       totalCount
       edges {
@@ -15,6 +16,10 @@ export const issueCommentsQuery = graphql`
           body
           created_at
           author_id
+          users {
+            name
+            avatar_url
+          }
         }
       }
       pageInfo {

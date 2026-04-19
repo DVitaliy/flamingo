@@ -1,7 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useLazyLoadQuery } from "react-relay";
+
 import type { issueCommentsQuery as IssueCommentsQueryType } from "@/__generated__/issueCommentsQuery.graphql";
+import { formatDate } from "@/lib/format-date";
+
 import { issueCommentsQuery } from "./issue-comments.query";
 
 type Props = {
@@ -11,43 +15,47 @@ type Props = {
 export function IssueCommentsSection({ issueId }: Props) {
   const data = useLazyLoadQuery<IssueCommentsQueryType>(
     issueCommentsQuery,
-    {
-      issueId,
-      first: 3,
-      after: null,
-    },
-    {
-      fetchPolicy: "store-and-network",
-    },
+    { issueId, first: 2, after: null },
+    { fetchPolicy: "store-and-network" },
   );
 
   const comments = data.commentsCollection;
 
+  if (!comments?.edges?.length) {
+    return <p className="text-sm text-neutral-400">No comments yet.</p>;
+  }
+
   return (
-    <section className="space-y-4">
-      <div>
-        <h2 className="text-lg font-semibold">Comments</h2>
-        <p className="text-sm text-neutral-500">
-          Total: {comments?.totalCount ?? 0}
-        </p>
-      </div>
+    <div className="space-y-3">
+      {comments.edges.map((edge) => {
+        if (!edge?.node) return null;
+        const { node } = edge;
 
-      <div className="space-y-3">
-        {comments?.edges?.map((edge) => {
-          if (!edge?.node) {
-            return null;
-          }
-
-          return (
-            <article key={edge.node.id} className="rounded border p-4">
-              <p className="text-sm text-neutral-800">{edge.node.body}</p>
-              <p className="mt-2 text-xs text-neutral-500">
-                {edge.node.created_at}
-              </p>
-            </article>
-          );
-        })}
-      </div>
-    </section>
+        return (
+          <article key={node.id} className="rounded border p-4">
+            <div className="mb-2 flex items-center gap-2">
+              <div className="relative size-7 shrink-0 overflow-hidden rounded-full bg-gray-200">
+                {node.users?.avatar_url && (
+                  <Image
+                    src={node.users.avatar_url}
+                    alt={node.users.name}
+                    fill
+                    sizes="28px"
+                    className="object-cover"
+                  />
+                )}
+              </div>
+              <span className="text-sm font-medium">
+                {node.users?.name ?? "Unknown"}
+              </span>
+              <span className="text-xs text-neutral-400">
+                {formatDate(node.created_at)}
+              </span>
+            </div>
+            <p className="text-sm text-neutral-800">{node.body}</p>
+          </article>
+        );
+      })}
+    </div>
   );
 }

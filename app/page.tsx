@@ -10,6 +10,7 @@ import {
   type IssueStatus,
   type IssuePriority,
 } from "@/lib/issues/issue-enums";
+import { formatDate } from "@/lib/format-date";
 
 import { IssuesListLiveUpdates } from "./issues-list-live-updates";
 
@@ -89,7 +90,9 @@ export default async function HomePage({ searchParams }: Props) {
                 Assigned: {issue.users?.name ?? "none"}
               </p>
 
-              <p className="text-sm text-neutral-500">{issue.created_at}</p>
+              <p className="text-sm text-neutral-500">
+                {formatDate(issue.created_at)}
+              </p>
 
               {(issue.issue_labelsCollection?.edges?.length ?? 0) > 0 && (
                 <div className="mt-1 flex flex-wrap gap-1">
