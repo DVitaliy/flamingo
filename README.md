@@ -1,3 +1,5 @@
+![Lighthouse report](./assets/lighthouse.png)
+
 This project was built as part of the Flamingo Frontend Engineer take-home assignment and follows the specification described in [speka.md](./speka.md).
 
 ## Getting Started
@@ -313,3 +315,7 @@ The main problems I hit were:
 ### What I would do with more time
 
 With more time, I would further push the project toward section-level Relay fragments and paginated Relay-driven UI, especially on the issue detail page, so that the implementation more fully reflects the intended fragment-colocation model from the assignment.
+
+## Time allocation
+
+I spent most of my time on implementing and making the core scenarios from the specification work correctly: setting up and connecting the database, integrating `pg_graphql` and Relay, executing queries and mutations, validating data, persisting changes, and covering as many functional cases from the spec as possible. I spent noticeably less time on the internal project structure, including file naming and how files are organized across directories. I spent even less time on visual polish and UI styling, because my main priority was working functionality and alignment with the specification requirements.
