@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import type { ConcreteRequest } from "relay-runtime";
 
 type GraphQLError = {
@@ -36,37 +37,42 @@ function resolveQueryText(query: string | ConcreteRequest) {
   }
   throw new Error("Relay request does not contain printable query text");
 }
+
 export async function executeGraphQL<
   TData,
   TVariables = Record<string, never>,
 >({ query, variables, cache = "no-store" }: ExecuteGraphQLParams<TVariables>) {
-  const response = await fetch(graphqlUrl, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      apikey: supabaseAnonKey,
-      Authorization: `Bearer ${supabaseAnonKey}`,
-    },
-    body: JSON.stringify({
-      query: resolveQueryText(query),
-      variables: variables ?? {},
-    }),
-    cache,
-  });
+  try {
+    const response = await fetch(graphqlUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        apikey: supabaseAnonKey,
+        Authorization: `Bearer ${supabaseAnonKey}`,
+      },
+      body: JSON.stringify({
+        query: resolveQueryText(query),
+        variables: variables ?? {},
+      }),
+      cache,
+    });
 
-  const json = (await response.json()) as GraphQLResponse<TData>;
-
-  if (!response.ok || json.errors?.length) {
-    throw new Error(
+    const json = (await response.json()) as GraphQLResponse<TData>;
+    const errorMessage =
       json.errors
         ?.map((error) => error.message || "Unknown GraphQL error")
-        .join(", ") || "GraphQL request failed",
-    );
-  }
+        .join(", ") || "GraphQL request failed";
 
-  if (!json.data) {
-    throw new Error("GraphQL response does not contain data");
-  }
+    if (!response.ok || json.errors?.length) {
+      throw new Error(errorMessage);
+    }
 
-  return json.data;
+    if (!json.data) {
+      throw new Error("GraphQL response does not contain data");
+    }
+
+    return json.data;
+  } catch {
+    redirect("/app-unavailable");
+  }
 }
