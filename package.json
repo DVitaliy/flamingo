@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "pnpm schema:sync && next build",
     "start": "next start",
     "lint": "eslint",
     "relay": "relay-compiler",

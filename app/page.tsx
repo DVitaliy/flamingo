@@ -12,6 +12,8 @@ import {
   type IssuePriority,
 } from "@/lib/issues/issue-enums";
 
+import { PriorityBadge } from "@/components/issues/priority-badge";
+import { StatusIcon } from "@/components/issues/status-icon";
 import { IssuesListLiveUpdates } from "./issues-list-live-updates";
 
 type Props = {
@@ -32,42 +34,7 @@ function normalizePriority(priority?: string | string[]) {
   return values.filter((value): value is IssuePriority => value in issuePriorityLabels);
 }
 
-function StatusIcon({ status }: { status: string }) {
-  if (status === "done") {
-    return (
-      <svg width="18" height="18" viewBox="0 0 16 16" fill="none" className="shrink-0 text-purple-500" aria-label="Done">
-        <circle cx="8" cy="8" r="7.5" stroke="currentColor" />
-        <path d="M4.5 8.5L6.5 10.5L11.5 5.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    );
-  }
-  if (status === "in_progress") {
-    return (
-      <svg width="18" height="18" viewBox="0 0 16 16" fill="none" className="shrink-0 text-yellow-500" aria-label="In progress">
-        <circle cx="8" cy="8" r="7.5" stroke="currentColor" />
-        <path d="M8 4.5V8L10.5 10.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    );
-  }
-  return (
-    <svg width="18" height="18" viewBox="0 0 16 16" fill="none" className="shrink-0 text-neutral-400" aria-label="Todo">
-      <circle cx="8" cy="8" r="7.5" stroke="currentColor" />
-    </svg>
-  );
-}
 
-function PriorityBadge({ priority, label }: { priority: string; label: string }) {
-  const styles =
-    priority === "high"
-      ? "bg-red-100 text-red-700"
-      : priority === "medium"
-        ? "bg-amber-100 text-amber-700"
-        : "bg-neutral-100 text-neutral-500";
-
-  return (
-    <span className={`rounded px-1.5 py-0.5 font-medium ${styles}`}>{label}</span>
-  );
-}
 
 export default async function HomePage({ searchParams }: Props) {
   const params = await searchParams;

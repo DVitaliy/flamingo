@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 
+import { PriorityBadge } from "@/components/issues/priority-badge";
+import { StatusIcon } from "@/components/issues/status-icon";
 import { formatDate } from "@/lib/format-date";
 import { getIssueById } from "@/lib/issues/get-issue-by-id";
 
@@ -28,10 +30,20 @@ export default async function IssueDetailsPage({ params }: Props) {
     issue.issue_labelsCollection?.edges?.flatMap((e) =>
       e?.node?.labels ? [e.node.labels] : [],
     ) ?? [];
+  const priorityBg =
+    issue.priority === "high"
+      ? "bg-red-50"
+      : issue.priority === "medium"
+        ? "bg-amber-50"
+        : "bg-neutral-50";
+
   return (
     <main className="max-w-3xl p-6">
       <div className="mb-6 flex items-start justify-between gap-4">
-        <h1 className="text-2xl font-semibold">{issue.title}</h1>
+        <div className="flex items-center gap-2">
+          <StatusIcon status={issue.status} />
+          <h1 className="text-2xl font-semibold">{issue.title}</h1>
+        </div>
         <Link
           href={`/issues/${issue.id}/edit`}
           className="shrink-0 rounded bg-neutral-100 px-3 py-1.5 text-sm font-medium transition-colors hover:bg-neutral-200"
@@ -40,13 +52,10 @@ export default async function IssueDetailsPage({ params }: Props) {
         </Link>
       </div>
 
-      <div className="mb-8 rounded-lg border border-neutral-200 bg-neutral-50 p-4">
+      <div className={`mb-8 rounded-lg border border-neutral-200 ${priorityBg} p-4`}>
         <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-3 text-sm">
-          <dt className="text-neutral-500">Status</dt>
-          <dd className="font-medium">{issue.status_normalized}</dd>
-
           <dt className="text-neutral-500">Priority</dt>
-          <dd className="font-medium">{issue.priority_normalized}</dd>
+          <dd><PriorityBadge priority={issue.priority} label={issue.priority_normalized} /></dd>
 
           {issue.users && (
             <>
