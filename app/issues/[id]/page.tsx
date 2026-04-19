@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { z } from "zod";
 
 import { PriorityBadge } from "@/components/issues/priority-badge";
-import { StatusIcon } from "@/components/issues/status-icon";
+import { IssueStatusToggle } from "@/components/issues/issue-status-toggle";
 import { formatDate } from "@/lib/format-date";
 import { getIssueById } from "@/lib/issues/get-issue-by-id";
 
@@ -41,7 +41,7 @@ export default async function IssueDetailsPage({ params }: Props) {
     <main className="max-w-3xl p-6">
       <div className="mb-6 flex items-start justify-between gap-4">
         <div className="flex items-center gap-2">
-          <StatusIcon status={issue.status} />
+          <IssueStatusToggle issueId={issue.id} status={issue.status} />
           <h1 className="text-2xl font-semibold">{issue.title}</h1>
         </div>
         <Link

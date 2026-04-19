@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useTransition } from "react";
+import { useTransition } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { issueStatusOptions, type IssueStatus } from "@/lib/issues/issue-enums";
@@ -11,34 +11,21 @@ export function StatusFilters() {
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
-  const selectedStatuses = useMemo(() => {
-    return new Set(searchParams.getAll("status") as IssueStatus[]);
-  }, [searchParams]);
+  const selected = searchParams.get("status") as IssueStatus | null;
 
-  const handleCheckedChange = (status: IssueStatus, checked: boolean) => {
+  const handleChange = (status: IssueStatus) => {
     const nextParams = new URLSearchParams(searchParams.toString());
-    const currentStatuses = nextParams.getAll("status").filter(Boolean);
-
-    nextParams.delete("status");
     nextParams.delete("after");
+    nextParams.delete("before");
 
-    const nextStatuses = checked
-      ? Array.from(new Set([...currentStatuses, status]))
-      : currentStatuses.filter((value) => value !== status);
-
-    nextStatuses.forEach((value) => {
-      nextParams.append("status", value);
-    });
+    if (selected === status) {
+      nextParams.delete("status");
+    } else {
+      nextParams.set("status", status);
+    }
 
     const query = nextParams.toString();
     const nextUrl = query ? `${pathname}?${query}` : pathname;
-    const currentUrl = searchParams.toString()
-      ? `${pathname}?${searchParams.toString()}`
-      : pathname;
-
-    if (nextUrl === currentUrl) {
-      return;
-    }
 
     startTransition(() => {
       router.replace(nextUrl);
@@ -51,7 +38,7 @@ export function StatusFilters() {
       <legend className="mb-2 text-sm font-medium">Status</legend>
       <div className="flex flex-wrap gap-2">
         {issueStatusOptions.map((option) => {
-          const checked = selectedStatuses.has(option.value);
+          const checked = selected === option.value;
           return (
             <label
               key={option.value}
@@ -59,12 +46,11 @@ export function StatusFilters() {
               style={{ opacity: isPending ? 0.5 : 1 }}
             >
               <input
-                type="checkbox"
+                type="radio"
+                name="status"
                 className="sr-only"
                 checked={checked}
-                onChange={(e) =>
-                  handleCheckedChange(option.value, e.target.checked)
-                }
+                onChange={() => handleChange(option.value)}
                 disabled={isPending}
               />
               <span

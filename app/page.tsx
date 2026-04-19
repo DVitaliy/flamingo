@@ -13,7 +13,7 @@ import {
 } from "@/lib/issues/issue-enums";
 
 import { PriorityBadge } from "@/components/issues/priority-badge";
-import { StatusIcon } from "@/components/issues/status-icon";
+import { IssueStatusToggle } from "@/components/issues/issue-status-toggle";
 import { IssuesListLiveUpdates } from "./issues-list-live-updates";
 
 type Props = {
@@ -87,7 +87,7 @@ export default async function HomePage({ searchParams }: Props) {
               key={issue.nodeId}
               className={`flex items-center gap-3 rounded-lg px-4 py-3 ${priorityBg}`}
             >
-              <StatusIcon status={issue.status} />
+              <IssueStatusToggle issueId={issue.id} status={issue.status} />
 
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
