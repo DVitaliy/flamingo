@@ -11,7 +11,7 @@ import {
   issueCommentsQuery,
   issueCommentsPaginationFragment,
 } from "./issue-comments.query";
-
+const COUNT_MESSAGES = 20;
 export function IssueCommentsSectionV2({
   issueId,
   refreshKey,
@@ -21,7 +21,7 @@ export function IssueCommentsSectionV2({
 }) {
   const queryData = useLazyLoadQuery<IssueCommentsQueryType>(
     issueCommentsQuery,
-    { issueId, first: 2 },
+    { issueId, first: COUNT_MESSAGES },
     { fetchPolicy: "store-and-network", fetchKey: refreshKey },
   );
 
