@@ -1,7 +1,17 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+This project was built as part of the Flamingo Frontend Engineer take-home assignment and follows the specification described in [speka.md](./speka.md).
+
 ## Getting Started
-Clone the repository and install dependencies:
+To run this project, complete the following steps in order:
+
+1. Clone the repository and install dependencies.
+2. Set up the database.
+3. Configure the database connection.
+4. Generate GraphQL and Relay types.
+5. Start the development server
+
+### 1. Clone the repository and install dependencies:
 
 ```bash
 git clone https://github.com/DVitaliy/flamingo.git
@@ -9,11 +19,54 @@ cd flamingo
 pnpm install
 ```
 
-Before the first local run, create `.env.local` from `.env.example` and fill in:
+### 2. Set up the database
+
+This project uses Supabase Postgres together with the `pg_graphql` extension. The database requirements for this project are defined in the specification. See [speka.md](./speka.md) for the expected schema and related data model details.
+
+- Create a new Supabase project in the dashboard.
+
+- Apply the base schema
+
+  Run the SQL from `supabase/schema.sql` in the Supabase SQL editor.
+
+  This script:
+
+  - enables `pgcrypto`
+  - enables `pg_graphql`
+  - creates the Postgres enums `issue_status` and `issue_priority`
+  - creates the tables `users`, `issues`, `comments`, `labels`, and `issue_labels`
+  - creates the indexes used by the app
+  - enables `totalCount` and `aggregate` support for `comments` in `pg_graphql`
+  - includes the SQL for adding `public.issues` to the Supabase realtime publication
+
+  > In some environments, the realtime publication step may need to be run manually:
+
+  ```sql
+  alter publication supabase_realtime add table public.issues;
+  ```
+
+- Apply seed data, run `supabase/seed.sql` after the base schema.
+
+### 3. Configure the database connection.
+
+Create `.env.local` from `.env.example` and fill in:
 
 - `NEXT_PUBLIC_SUPABASE_URL`
 - `NEXT_PUBLIC_SUPABASE_GRAPHQL_URL`
 - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+Where to get them:
+
+* NEXT_PUBLIC_SUPABASE_URL
+    > In Supabase Studio, open your project and copy the Project URL from the Connect dialog, or from __Settings → API__.  
+* NEXT_PUBLIC_SUPABASE_ANON_KEY
+    > For client-side usage, copy the project’s anon key from __Settings → API → Project API keys__. Supabase also notes that the newer publishable key is the preferred replacement for the older anon key, but both are available during the transition period.  
+* NEXT_PUBLIC_SUPABASE_GRAPHQL_URL
+    > Build it from your project reference using this format:
+    > __https://<PROJECT_REF>.supabase.co/graphql/v1__
+    > Supabase documents this as the project GraphQL endpoint and notes that it must not have a trailing slash. You can find the project reference in __Settings → General → Project Settings → Reference ID__.
+
+### 4. Generate GraphQL and Relay types
 
 Then make sure the database is initialized and the local GraphQL/Relay artifacts are generated:
 
@@ -29,19 +82,7 @@ This project does not store generated Relay artifacts or the reflected GraphQL s
 - `schema.graphql`
 - `__generated__/`
 
-To sync the current Supabase GraphQL schema and regenerate Relay types, run:
-
-```bash
-pnpm schema:sync
-```
-
-This command:
-
-1. downloads the latest reflected GraphQL schema into `schema.graphql`
-2. ensures the `__generated__` directory exists
-3. runs `relay-compiler` to regenerate typed artifacts
-
-Then start the development server:
+### 5. Start the development server
 
 ```bash
 pnpm dev
@@ -49,89 +90,85 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Database setup
 
-This project uses Supabase Postgres together with the `pg_graphql` extension.
+## Spec Compliance Checklist
 
-### 1. Create a Supabase project
+Legend:
+- `[done]` completed
+- `[partial]` partially completed
+- `[missing]` not completed
+- `[unverified]` cannot be verified from the repository alone
 
-Create a new Supabase project in the dashboard.
+For every `[missing]` and `[partial]` item below, a short explanation is provided directly underneath.
 
-### 2. Apply the base schema
+### Tech Stack
+- `[done]` Next.js 14+ with App Router
+- `[done]` Relay + Supabase GraphQL (`pg_graphql`)
+- `[done]` TypeScript in strict mode
+- `[done]` Tailwind CSS
+- `[done]` Zod validation
 
-Run the SQL from `supabase/schema.sql` in the Supabase SQL editor.
+### Backend / Database
+- `[done]` Supabase is used as the backend
+- `[done]` `pg_graphql` is enabled in the database setup
+- `[done]` Required tables exist: `users`, `issues`, `comments`, `labels`, `issue_labels`
+- `[done]` Required relationships exist
+- `[done]` Schema is extended, but the required tables and relationships are preserved
 
-This script:
+### Issue List
+- `[done]` Filter by status
+- `[done]` Filter by priority
+- `[missing]` Filter by labels
+  Label filter UI exists, but label query params are not applied to the server-side issue list query.
+- `[partial]` Multi-select filters
+  Multi-select works for status and priority. Label multi-select is present in the UI, but does not affect the list results.
+- `[done]` Cursor-based pagination using Relay connection spec
+- `[done]` Optimistic update on status change
+  Status changes now update immediately in the UI and are reconciled with the server result.
+- `[done]` Graceful reconciliation on status update failure
+  If the mutation fails, the optimistic status is rolled back to the previous value and visible feedback is shown to the user.
+- `[done]` Failure feedback for status update, e.g. toast
+  Status update failures now show visible inline feedback instead of failing silently.
 
-- enables `pgcrypto`
-- enables `pg_graphql`
-- creates the Postgres enums `issue_status` and `issue_priority`
-- creates the tables `users`, `issues`, `comments`, `labels`, and `issue_labels`
-- creates the indexes used by the app
-- enables `totalCount` and `aggregate` support for `comments` in `pg_graphql`
-- includes the SQL for adding `public.issues` to the Supabase realtime publication
+### Issue Detail
+- `[done]` Edit title
+- `[done]` Edit description
+- `[done]` Edit status
+- `[done]` Edit priority
+- `[done]` Edit assignee
+- `[done]` Edit labels
+- `[done]` Comment thread exists
+- `[done]` Comment thread uses cursor-based pagination
+- `[partial]` Each detail-page section uses a co-located Relay fragment
+  Comments use Relay fragments and pagination, but the rest of the detail page still relies on a larger page-level query.
+- `[missing]` No monolithic top-level query for the detail page
+  The detail page still uses a monolithic issue query for most sections.
 
-In some environments, the realtime publication step may need to be run manually:
+### Real-Time
+- `[done]` Issue list reflects changes from other users without a manual browser refresh
+- `[done]` Supabase Realtime is used for list updates
 
-```sql
-alter publication supabase_realtime add table public.issues;
-```
+### Relay Compiler + pg_graphql
+- `[done]` Relay compiler is configured to work with `pg_graphql` conventions
+- `[done]` README explains how Relay + `pg_graphql` were made to work together
+- `[done]` README explains the main problems encountered in that integration
 
-This statement can fail when executed together with the full script if:
+### README
+- `[done]` Setup instructions: clone
+- `[done]` Setup instructions: install
+- `[done]` Setup instructions: configure Supabase
+- `[done]` Setup instructions: run
+- `[done]` Relay + `pg_graphql` configuration is documented
+- `[done]` Architecture decisions are documented
+- `[done]` Trade-offs are documented
+- `[done]` Incomplete areas are explicitly described, including what would be done with more time
 
-- `public.issues` is already part of `supabase_realtime`
-- the target environment does not expose or allow modifying that publication in the same way
-
-### 3. Apply seed data if needed
-
-If you want sample data for local development, run `supabase/seed.sql` after the base schema.
-
-### 4. Re-sync the reflected GraphQL schema
-
-After creating or changing the database schema, run:
-
-```bash
-pnpm schema:sync
-```
-
-This step is separate from the SQL setup because `pg_graphql` reflects the current Postgres schema, and Relay types must be regenerated from that reflected GraphQL schema.
-
-### Notes
-
-- `schema.graphql` and `__generated__/` are generated locally and are not committed to Git.
-- If the Supabase schema changes, rerun `pnpm schema:sync` before `pnpm dev` or `pnpm build`.
-- If the realtime publication step fails, apply the rest of the schema first and then run `alter publication supabase_realtime add table public.issues;` separately.
-- Label filtering is intentionally not implemented through a many-to-many relation filter because the reflected `pg_graphql` schema does not expose the necessary `issuesFilter` shape for it.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-
-### Build-time generation
-
-The production build runs:
-
-```bash
-pnpm schema:sync && next build
-```
-
-That means Vercel does not rely on committed `schema.graphql` or committed `__generated__` artifacts. They are recreated during the build from the current Supabase GraphQL endpoint.
-
+### Submission
+- `[done]` Private GitHub repo
+- `[unverified]` Access granted to Oleksandra
+- `[done]` Deployed on Vercel
 
 ## Label filtering trade-off
 
@@ -245,7 +282,7 @@ This gave me:
 - a working SSR flow in Next.js App Router
 - a path to use Relay where it provides the most value, especially for paginated UI sections
 
-### Detail page trade-off
+## Detail page trade-off
 
 One important mismatch with the original assignment is that the issue detail page is not yet fully split into section-level Relay fragments.
 

@@ -5,10 +5,7 @@ import type {
   issue_priority,
   issue_status,
 } from "@/__generated__/issueDetailsQuery.graphql";
-import {
-  issuePriorityOptions,
-  issueStatusOptions,
-} from "@/lib/issues/issue-enums";
+import { issuePriorityOptions } from "@/lib/issues/issue-enums";
 
 type User = { id: string; name: string };
 type Label = { id: string; name: string; color: string };
@@ -111,24 +108,7 @@ export function IssueForm({
       </div>
 
       <div className="flex flex-wrap gap-4">
-        <div className="space-y-1.5">
-          <label htmlFor="status" className="block text-sm font-medium">
-            Status
-          </label>
-          <select
-            id="status"
-            name="status"
-            defaultValue={defaultValues.status ?? "todo"}
-            disabled={isPending}
-            className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm outline-none focus:border-neutral-400 focus:ring-1 focus:ring-neutral-300 disabled:opacity-50"
-          >
-            {issueStatusOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
-        </div>
+        <input type="hidden" name="status" value={defaultValues.status ?? "todo"} />
 
         <div className="space-y-1.5">
           <label htmlFor="priority" className="block text-sm font-medium">
