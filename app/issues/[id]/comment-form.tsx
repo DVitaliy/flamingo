@@ -1,44 +1,71 @@
 "use client";
 
 import { useActionState } from "react";
+import { useLazyLoadQuery } from "react-relay";
 
+import type { usersListQuery as UsersListQueryType } from "@/__generated__/usersListQuery.graphql";
+import { usersListQuery } from "@/app/users-list.query";
 import { createCommentAction, type CreateCommentActionState } from "./actions";
 
 type Props = {
   issueId: string;
 };
 
-const initialState: CreateCommentActionState = {
-  error: null,
-};
+const initialState: CreateCommentActionState = { error: null };
 
 export function CommentForm({ issueId }: Props) {
-  const [state, formAction, isPending] = useActionState(
-    createCommentAction,
-    initialState,
+  const [state, formAction, isPending] = useActionState(createCommentAction, initialState);
+
+  const data = useLazyLoadQuery<UsersListQueryType>(
+    usersListQuery,
+    {},
+    { fetchPolicy: "store-and-network" },
   );
+
+  const users =
+    data.usersCollection?.edges?.flatMap((e) => (e?.node ? [e.node] : [])) ?? [];
 
   return (
     <form action={formAction} className="space-y-3 rounded border p-4">
       <input type="hidden" name="issueId" value={issueId} />
 
-      <div className="space-y-2">
+      {users.length > 0 && (
+        <div className="space-y-1.5">
+          <label htmlFor="authorId" className="block text-sm font-medium">
+            Comment as
+          </label>
+          <select
+            id="authorId"
+            name="authorId"
+            defaultValue=""
+            disabled={isPending}
+            className="rounded border px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-neutral-400 disabled:opacity-50"
+          >
+            <option value="">Select user</option>
+            {users.map((user) => (
+              <option key={user.id} value={user.id}>
+                {user.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
+
+      <div className="space-y-1.5">
         <label htmlFor="body" className="block text-sm font-medium">
-          New comment
+          Comment
         </label>
         <textarea
           id="body"
           name="body"
           rows={4}
-          className="w-full rounded border px-3 py-2 text-sm"
+          className="w-full rounded border px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-neutral-400 disabled:opacity-50"
           placeholder="Write a comment..."
           disabled={isPending}
         />
       </div>
 
-      {state.error ? (
-        <p className="text-sm text-red-600">{state.error}</p>
-      ) : null}
+      {state.error && <p className="text-sm text-red-600">{state.error}</p>}
 
       <button
         type="submit"

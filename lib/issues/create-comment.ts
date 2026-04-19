@@ -7,7 +7,7 @@ import { executeGraphQL } from "@/lib/graphql/execute-graphql";
 type CreateCommentResponse = createCommentMutation["response"];
 type CreateCommentVariables = createCommentMutation["variables"];
 
-export async function createComment(input: { issueId: string; body: string }) {
+export async function createComment(input: { issueId: string; body: string; authorId?: string }) {
   const data = await executeGraphQL<
     CreateCommentResponse,
     CreateCommentVariables
@@ -17,7 +17,7 @@ export async function createComment(input: { issueId: string; body: string }) {
       input: {
         issue_id: input.issueId,
         body: input.body,
-        // author_id: FALLBACK_AUTHOR_ID,
+        author_id: input.authorId ?? null,
       },
     },
   });

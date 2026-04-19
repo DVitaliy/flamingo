@@ -1,5 +1,5 @@
 /**
- * @generated SignedSource<<d32f1959dc8c25816ac99fc92420b381>>
+ * @generated SignedSource<<3cde9fa85b3fa3317d66310179c8d4b4>>
  * @lightSyntaxTransform
  * @nogrep
  */
@@ -10,47 +10,49 @@
 
 import { ConcreteRequest } from 'relay-runtime';
 import { FragmentRefs } from "relay-runtime";
-export type issueCommentsQuery$variables = {
+export type IssueCommentsPaginationQuery$variables = {
   after?: any | null | undefined;
   first: number;
   issueId: any;
 };
-export type issueCommentsQuery$data = {
+export type IssueCommentsPaginationQuery$data = {
   readonly " $fragmentSpreads": FragmentRefs<"issueComments_comments">;
 };
-export type issueCommentsQuery = {
-  response: issueCommentsQuery$data;
-  variables: issueCommentsQuery$variables;
+export type IssueCommentsPaginationQuery = {
+  response: IssueCommentsPaginationQuery$data;
+  variables: IssueCommentsPaginationQuery$variables;
 };
 
 const node: ConcreteRequest = (function(){
-var v0 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "after"
-},
+var v0 = [
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "after"
+  },
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "first"
+  },
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "issueId"
+  }
+],
 v1 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "first"
-},
-v2 = {
-  "defaultValue": null,
-  "kind": "LocalArgument",
-  "name": "issueId"
-},
-v3 = {
   "kind": "Variable",
   "name": "after",
   "variableName": "after"
 },
-v4 = {
+v2 = {
   "kind": "Variable",
   "name": "first",
   "variableName": "first"
 },
-v5 = [
-  (v3/*: any*/),
+v3 = [
+  (v1/*: any*/),
   {
     "fields": [
       {
@@ -68,7 +70,7 @@ v5 = [
     "kind": "ObjectValue",
     "name": "filter"
   },
-  (v4/*: any*/),
+  (v2/*: any*/),
   {
     "kind": "Literal",
     "name": "orderBy",
@@ -79,7 +81,7 @@ v5 = [
     ]
   }
 ],
-v6 = {
+v4 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -88,19 +90,15 @@ v6 = {
 };
 return {
   "fragment": {
-    "argumentDefinitions": [
-      (v0/*: any*/),
-      (v1/*: any*/),
-      (v2/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "issueCommentsQuery",
+    "name": "IssueCommentsPaginationQuery",
     "selections": [
       {
         "args": [
-          (v3/*: any*/),
-          (v4/*: any*/),
+          (v1/*: any*/),
+          (v2/*: any*/),
           {
             "kind": "Variable",
             "name": "issueId",
@@ -116,17 +114,13 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [
-      (v2/*: any*/),
-      (v1/*: any*/),
-      (v0/*: any*/)
-    ],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "issueCommentsQuery",
+    "name": "IssueCommentsPaginationQuery",
     "selections": [
       {
         "alias": null,
-        "args": (v5/*: any*/),
+        "args": (v3/*: any*/),
         "concreteType": "commentsConnection",
         "kind": "LinkedField",
         "name": "commentsCollection",
@@ -212,11 +206,11 @@ return {
                         "name": "avatar_url",
                         "storageKey": null
                       },
-                      (v6/*: any*/)
+                      (v4/*: any*/)
                     ],
                     "storageKey": null
                   },
-                  (v6/*: any*/),
+                  (v4/*: any*/),
                   {
                     "alias": null,
                     "args": null,
@@ -260,7 +254,7 @@ return {
       },
       {
         "alias": null,
-        "args": (v5/*: any*/),
+        "args": (v3/*: any*/),
         "filters": [
           "filter",
           "orderBy"
@@ -273,16 +267,16 @@ return {
     ]
   },
   "params": {
-    "cacheID": "54cfdac593323768e902ae2d0cc8df42",
+    "cacheID": "3f6d5627e2482674352a8713f6f6a6e3",
     "id": null,
     "metadata": {},
-    "name": "issueCommentsQuery",
+    "name": "IssueCommentsPaginationQuery",
     "operationKind": "query",
-    "text": "query issueCommentsQuery(\n  $issueId: UUID!\n  $first: Int!\n  $after: Cursor\n) {\n  ...issueComments_comments_3YjkUj\n}\n\nfragment issueComments_comments_3YjkUj on Query {\n  commentsCollection(first: $first, after: $after, filter: {issue_id: {eq: $issueId}}, orderBy: [{created_at: DescNullsFirst}]) {\n    totalCount\n    edges {\n      cursor\n      node {\n        id\n        body\n        created_at\n        author_id\n        users {\n          name\n          avatar_url\n          nodeId\n        }\n        nodeId\n        __typename\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
+    "text": "query IssueCommentsPaginationQuery(\n  $after: Cursor\n  $first: Int!\n  $issueId: UUID!\n) {\n  ...issueComments_comments_3YjkUj\n}\n\nfragment issueComments_comments_3YjkUj on Query {\n  commentsCollection(first: $first, after: $after, filter: {issue_id: {eq: $issueId}}, orderBy: [{created_at: DescNullsFirst}]) {\n    totalCount\n    edges {\n      cursor\n      node {\n        id\n        body\n        created_at\n        author_id\n        users {\n          name\n          avatar_url\n          nodeId\n        }\n        nodeId\n        __typename\n      }\n    }\n    pageInfo {\n      hasNextPage\n      endCursor\n    }\n  }\n}\n"
   }
 };
 })();
 
-(node as any).hash = "b3fe95fafb4e007544eab3d74636648f";
+(node as any).hash = "faf95c17f60417c501c231faa6114c28";
 
 export default node;

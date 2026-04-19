@@ -6,8 +6,7 @@ import { z } from "zod";
 import { formatDate } from "@/lib/format-date";
 import { getIssueById } from "@/lib/issues/get-issue-by-id";
 
-import { CommentForm } from "./comment-form";
-import { IssueCommentsSection } from "./issue-comments-section";
+import { CommentListForm } from "./commentlist-form";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -29,7 +28,6 @@ export default async function IssueDetailsPage({ params }: Props) {
     issue.issue_labelsCollection?.edges?.flatMap((e) =>
       e?.node?.labels ? [e.node.labels] : [],
     ) ?? [];
-
   return (
     <main className="max-w-3xl p-6">
       <div className="mb-6 flex items-start justify-between gap-4">
@@ -94,16 +92,19 @@ export default async function IssueDetailsPage({ params }: Props) {
 
       {issue.description && (
         <div className="mb-8">
-          <h2 className="mb-2 text-sm font-medium text-neutral-500">Description</h2>
-          <p className="whitespace-pre-wrap text-sm text-neutral-800">{issue.description}</p>
+          <h2 className="mb-2 text-sm font-medium text-neutral-500">
+            Description
+          </h2>
+          <p className="whitespace-pre-wrap text-sm text-neutral-800">
+            {issue.description}
+          </p>
         </div>
       )}
 
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">Comments</h2>
-        <IssueCommentsSection issueId={issue.id} />
-        <CommentForm issueId={issue.id} />
-      </section>
+      <CommentListForm
+        issueId={issue.id}
+        totalCount={issue.commentsCollection?.totalCount ?? 0}
+      />
     </main>
   );
 }

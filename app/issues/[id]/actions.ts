@@ -7,6 +7,10 @@ import { createComment } from "@/lib/issues/create-comment";
 
 const createCommentSchema = z.object({
   issueId: z.uuid(),
+  authorId: z
+    .uuid()
+    .optional()
+    .or(z.literal("").transform(() => undefined)),
   body: z
     .string()
     .trim()
@@ -24,6 +28,7 @@ export async function createCommentAction(
 ) {
   const parsed = createCommentSchema.safeParse({
     issueId: formData.get("issueId"),
+    authorId: formData.get("authorId"),
     body: formData.get("body"),
   });
 
@@ -35,11 +40,12 @@ export async function createCommentAction(
     };
   }
 
-  await createComment({
+  const result = await createComment({
     issueId: parsed.data.issueId,
+    authorId: parsed.data.authorId,
     body: parsed.data.body,
   });
-
+  console.log("Created comment:", result);
   revalidatePath(`/issues/${parsed.data.issueId}`);
 
   return {
