@@ -1,6 +1,6 @@
 import { execFile } from 'node:child_process'
 import { promisify } from 'node:util'
-import { writeFile } from 'node:fs/promises'
+import { mkdir, writeFile } from 'node:fs/promises'
 import dotenv from 'dotenv'
 
 const execFileAsync = promisify(execFile)
@@ -35,5 +35,7 @@ const { stdout } = await execFileAsync(
   }
 )
 
+await mkdir('__generated__', { recursive: true })
 await writeFile('schema.graphql', stdout, 'utf8')
 console.log('schema.graphql updated')
+console.log('__generated__ directory ensured')
