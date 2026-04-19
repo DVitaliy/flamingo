@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 
 import { createComment } from "@/lib/issues/create-comment";
@@ -40,15 +41,11 @@ export async function createCommentAction(
     };
   }
 
-  const result = await createComment({
+  await createComment({
     issueId: parsed.data.issueId,
     authorId: parsed.data.authorId,
     body: parsed.data.body,
   });
-  console.log("Created comment:", result);
   revalidatePath(`/issues/${parsed.data.issueId}`);
-
-  return {
-    error: null,
-  };
+  redirect(`/issues/${parsed.data.issueId}`);
 }
