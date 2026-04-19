@@ -1,5 +1,3 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
 This project was built as part of the Flamingo Frontend Engineer take-home assignment and follows the specification described in [speka.md](./speka.md).
 
 ## Getting Started
