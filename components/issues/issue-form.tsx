@@ -85,7 +85,7 @@ export function IssueForm({
           defaultValue={defaultValues.title}
           disabled={isPending}
           placeholder="Issue title"
-          className="w-full rounded border px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-neutral-400 disabled:opacity-50"
+          className="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm outline-none focus:border-neutral-400 focus:ring-1 focus:ring-neutral-300 disabled:opacity-50"
         />
         {fieldErrors?.title && (
           <p className="text-xs text-red-600">{fieldErrors.title}</p>
@@ -103,7 +103,7 @@ export function IssueForm({
           defaultValue={defaultValues.description}
           disabled={isPending}
           placeholder="Add a description..."
-          className="w-full rounded border px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-neutral-400 disabled:opacity-50"
+          className="w-full rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm outline-none focus:border-neutral-400 focus:ring-1 focus:ring-neutral-300 disabled:opacity-50"
         />
         {fieldErrors?.description && (
           <p className="text-xs text-red-600">{fieldErrors.description}</p>
@@ -120,7 +120,7 @@ export function IssueForm({
             name="status"
             defaultValue={defaultValues.status ?? "todo"}
             disabled={isPending}
-            className="rounded border px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-neutral-400 disabled:opacity-50"
+            className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm outline-none focus:border-neutral-400 focus:ring-1 focus:ring-neutral-300 disabled:opacity-50"
           >
             {issueStatusOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -139,7 +139,7 @@ export function IssueForm({
             name="priority"
             defaultValue={defaultValues.priority ?? "medium"}
             disabled={isPending}
-            className="rounded border px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-neutral-400 disabled:opacity-50"
+            className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm outline-none focus:border-neutral-400 focus:ring-1 focus:ring-neutral-300 disabled:opacity-50"
           >
             {issuePriorityOptions.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -159,7 +159,7 @@ export function IssueForm({
               name="assigneeId"
               defaultValue={defaultValues.assigneeId ?? ""}
               disabled={isPending}
-              className="rounded border px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-neutral-400 disabled:opacity-50"
+              className="rounded-lg border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm outline-none focus:border-neutral-400 focus:ring-1 focus:ring-neutral-300 disabled:opacity-50"
             >
               <option value="">Unassigned</option>
               {users.map((user) => (

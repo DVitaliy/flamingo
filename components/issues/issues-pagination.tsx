@@ -49,7 +49,7 @@ export function IssuesPagination({ hasNextPage, endCursor }: Props) {
         type="button"
         onClick={goToFirstPage}
         disabled={isPending}
-        className="rounded border px-3 py-2 text-sm disabled:opacity-50"
+        className="rounded bg-neutral-100 px-3 py-1.5 text-sm font-medium transition-colors hover:bg-neutral-200 disabled:opacity-50"
       >
         First page
       </button>
@@ -58,7 +58,7 @@ export function IssuesPagination({ hasNextPage, endCursor }: Props) {
         type="button"
         onClick={goToNextPage}
         disabled={!hasNextPage || !endCursor || isPending}
-        className="rounded border px-3 py-2 text-sm disabled:opacity-50"
+        className="rounded bg-neutral-100 px-3 py-1.5 text-sm font-medium transition-colors hover:bg-neutral-200 disabled:opacity-50"
       >
         Next
       </button>

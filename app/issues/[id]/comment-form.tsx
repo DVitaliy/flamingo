@@ -26,7 +26,7 @@ export function CommentForm({ issueId }: Props) {
     data.usersCollection?.edges?.flatMap((e) => (e?.node ? [e.node] : [])) ?? [];
 
   return (
-    <form action={formAction} className="space-y-3 rounded border p-4">
+    <form action={formAction} className="space-y-3 rounded-lg border border-neutral-200 bg-neutral-50 p-4">
       <input type="hidden" name="issueId" value={issueId} />
 
       {users.length > 0 && (
@@ -39,7 +39,7 @@ export function CommentForm({ issueId }: Props) {
             name="authorId"
             defaultValue=""
             disabled={isPending}
-            className="rounded border px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-neutral-400 disabled:opacity-50"
+            className="rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm outline-none focus:border-neutral-400 focus:ring-1 focus:ring-neutral-300 disabled:opacity-50"
           >
             <option value="">Select user</option>
             {users.map((user) => (
@@ -59,7 +59,7 @@ export function CommentForm({ issueId }: Props) {
           id="body"
           name="body"
           rows={4}
-          className="w-full rounded border px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-neutral-400 disabled:opacity-50"
+          className="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm outline-none focus:border-neutral-400 focus:ring-1 focus:ring-neutral-300 disabled:opacity-50"
           placeholder="Write a comment..."
           disabled={isPending}
         />
@@ -70,7 +70,7 @@ export function CommentForm({ issueId }: Props) {
       <button
         type="submit"
         disabled={isPending}
-        className="rounded border px-3 py-2 text-sm disabled:opacity-50"
+        className="rounded bg-neutral-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-neutral-700 disabled:opacity-50"
       >
         {isPending ? "Creating..." : "Add comment"}
       </button>

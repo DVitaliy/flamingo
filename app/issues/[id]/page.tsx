@@ -34,13 +34,13 @@ export default async function IssueDetailsPage({ params }: Props) {
         <h1 className="text-2xl font-semibold">{issue.title}</h1>
         <Link
           href={`/issues/${issue.id}/edit`}
-          className="shrink-0 rounded border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-neutral-50"
+          className="shrink-0 rounded bg-neutral-100 px-3 py-1.5 text-sm font-medium transition-colors hover:bg-neutral-200"
         >
           Edit
         </Link>
       </div>
 
-      <div className="mb-8 rounded border p-4">
+      <div className="mb-8 rounded-lg border border-neutral-200 bg-neutral-50 p-4">
         <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-3 text-sm">
           <dt className="text-neutral-500">Status</dt>
           <dd className="font-medium">{issue.status_normalized}</dd>

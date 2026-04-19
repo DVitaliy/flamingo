@@ -15,7 +15,7 @@ export function FiltersPanel() {
       <div className="flex items-center gap-2">
         <button
           onClick={() => setOpen((prev) => !prev)}
-          className="flex items-center gap-1.5 rounded border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-neutral-50"
+          className="flex items-center gap-1.5 rounded bg-neutral-100 px-3 py-1.5 text-sm font-medium transition-colors hover:bg-neutral-200"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +57,7 @@ export function FiltersPanel() {
         }`}
       >
         <div className="overflow-hidden">
-          <div className="mt-3 flex flex-col gap-4 rounded border p-4">
+          <div className="mt-3 flex flex-col gap-4 rounded-lg border border-neutral-200 bg-neutral-50 p-4">
             <StatusFilters />
             <PriorityFilters />
             <LabelFilters />
